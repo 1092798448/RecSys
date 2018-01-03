@@ -20,7 +20,7 @@ imp.reload(Evaluation)
 
 def readData():
     data = []
-    fileName = './ml-100k/u.data'
+    fileName = 'u.data'
     fr = open(fileName,'r')
     for line in fr.readlines():
         lineArr = line.strip().split()
