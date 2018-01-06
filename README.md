@@ -7,5 +7,6 @@ UserCF:基于用户的算法
 UserCF_IIF：改进的基于用户的算法
 ItemCF：基于物品的算法
 ItemCF_IUF：改进的基于物品的算法
+LFM:隐因子模型算法 
 Evaluation：评价指标
 mainCF:主函数，读取数据和测试
