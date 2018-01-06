@@ -11,16 +11,19 @@ import ItemCF
 import ItemCF_IUF
 import random
 import Evaluation
+import LFM
 
 import imp
 imp.reload(UserCF)
 imp.reload(ItemCF)
 imp.reload(ItemCF_IUF)
 imp.reload(Evaluation)
+imp.reload(LFM)
+
 
 def readData():
     data = []
-    fileName = 'u.data'
+    fileName = './ml-100k/u.data'
     fr = open(fileName,'r')
     for line in fr.readlines():
         lineArr = line.strip().split()
@@ -51,18 +54,19 @@ def transform(oriData):
     
 if __name__ == '__main__':
     data = readData()
-    M = 5
+    numFlod = 5
     precision =0
     recall = 0
     coverage = 0
     popularity =0
-    for i in range(0,M):
-        [oriTrain,oriTest] = SplitData(data,M,i,0)
+    for i in range(0,numFlod):
+        [oriTrain,oriTest] = SplitData(data,numFlod,i,0)
         train = transform(oriTrain)
         test = transform(oriTest)
-        W = UserCF.UserSimilarity(train)
+        
+#        W = UserCF.UserSimilarity(train)
     #    rank = UserCF.Recommend('1',train,W)
-        result = UserCF.Recommendation(test.keys(), train, W)
+#        result = UserCF.Recommendation(test.keys(), train, W)
     
 #        W = UserCF_IIF.UserSimilarity(train)
     #    rank = UserCF_IIF.Recommend('1',train,W)
@@ -75,16 +79,22 @@ if __name__ == '__main__':
 #        W = ItemCF_IUF.ItemSimilarity(train)
     #    rank = ItemCF_IUF.Recommend('1',train,W)
 #        result =  ItemCF_IUF.Recommendation(test.keys(),train, W)
-    
-        precision += Evaluation.Precision(train,test, result)
-        recall += Evaluation.Recall(train,test,result)
-        coverage += Evaluation.Coverage(train, test, result)
-        popularity += Evaluation.Popularity(train, test, result)
+
+        [P,Q] = LFM.LatentFactorModel(train, 10,30, 0.02, 0.01)
+#        rank = LFM.Recommend('2',train,P,Q)
+        result = LFM.Recommendation(test.keys(), train,P,Q)
+
+
+        N = 30
+        precision += Evaluation.Precision(train,test, result,N)
+        recall += Evaluation.Recall(train,test,result,N)
+        coverage += Evaluation.Coverage(train, test, result,N)
+        popularity += Evaluation.Popularity(train, test, result,N)
        
-    precision /= M
-    recall /= M
-    coverage /= M
-    popularity /= M
+    precision /= numFlod
+    recall /= numFlod
+    coverage /= numFlod
+    popularity /= numFlod
     
      #运行完标志
     print('Done!')
