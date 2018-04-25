@@ -23,7 +23,7 @@ imp.reload(LFM)
 
 def readData():
     data = []
-    fileName = './ml-100k/u.data'
+    fileName = './u.data'
     fr = open(fileName,'r')
     for line in fr.readlines():
         lineArr = line.strip().split()
@@ -68,9 +68,9 @@ if __name__ == '__main__':
     #    rank = UserCF.Recommend('1',train,W)
 #        result = UserCF.Recommendation(test.keys(), train, W)
     
-#        W = UserCF_IIF.UserSimilarity(train)
+        W = UserCF_IIF.UserSimilarity(train)
     #    rank = UserCF_IIF.Recommend('1',train,W)
-#        result = UserCF_IIF.Recommendation(test.keys(), train, W)
+        result = UserCF_IIF.Recommendation(test.keys(), train, W)
         
     #    W = ItemCF.ItemSimilarity(train)
     #    rank = ItemCF.Recommend('1',train,W)
@@ -80,12 +80,12 @@ if __name__ == '__main__':
     #    rank = ItemCF_IUF.Recommend('1',train,W)
 #        result =  ItemCF_IUF.Recommendation(test.keys(),train, W)
 
-        [P,Q] = LFM.LatentFactorModel(train, 10,30, 0.02, 0.01)
+#        [P,Q] = LFM.LatentFactorModel(train, 10,30, 0.02, 0.01)
 #        rank = LFM.Recommend('2',train,P,Q)
-        result = LFM.Recommendation(test.keys(), train,P,Q)
+#        result = LFM.Recommendation(test.keys(), train,P,Q)
 
 
-        N = 30
+        N = 10
         precision += Evaluation.Precision(train,test, result,N)
         recall += Evaluation.Recall(train,test,result,N)
         coverage += Evaluation.Coverage(train, test, result,N)
@@ -96,5 +96,10 @@ if __name__ == '__main__':
     coverage /= numFlod
     popularity /= numFlod
     
-     #运行完标志
-    print('Done!')
+    
+     #输出结果
+    print('precision = %f' %precision)
+    print('recall = %f' %recall)
+    print('coverage = %f' %coverage)
+    print('popularity = %f' %popularity)
+    
